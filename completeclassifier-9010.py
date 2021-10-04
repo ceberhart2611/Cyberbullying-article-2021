@@ -44,7 +44,7 @@ model = svm.SVC(kernel='linear')
 model.fit(model_feature_list, model_labels)
 
 with conn.cursor() as cursor:
-        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from BIN_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_9010 N on A.commentid = N.commentid where recordtype = 'testing'")
+        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_9010 N on A.commentid = N.commentid where recordtype = 'testing'")
         test_records = cursor.fetchall()
         
 for trecord in test_records:
@@ -67,7 +67,7 @@ model = GaussianNB()
 model.fit(model_feature_list, model_labels)
 
 with conn.cursor() as cursor:
-        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from BIN_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_9010 N on A.commentid = N.commentid where recordtype = 'testing'")
+        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_9010 N on A.commentid = N.commentid where recordtype = 'testing'")
         test_records = cursor.fetchall()
         
 for trecord in test_records:

@@ -14,7 +14,7 @@ model_labels = []
 
 with pyodbc.connect('DRIVER='+driver+';Server=(LocalDb)\MSSQLLocalDB;Integrated Security=true;Database=bullyingdb;') as conn:
     with conn.cursor() as cursor:
-        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_8020 N on A.commentid = N.commentid where recordtype = 'training'")
+        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_9010 N on A.commentid = N.commentid where recordtype = 'training'")
         model_records = cursor.fetchall()
 
 #false = 0 ; true = 1
@@ -44,7 +44,7 @@ model = svm.SVC(kernel='linear')
 model.fit(model_feature_list, model_labels)
 
 with conn.cursor() as cursor:
-        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_8020 N on A.commentid = N.commentid where recordtype = 'testing'")
+        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_9010 N on A.commentid = N.commentid where recordtype = 'testing'")
         test_records = cursor.fetchall()
         
 for trecord in test_records:
@@ -60,14 +60,14 @@ for trecord in test_records:
         jud = 'error'
 
     with conn.cursor() as cursor:
-        cursor.execute("insert into res30_8020 values (" + str(trecord.commentid) + ", NULL, '" + str(jud) + "')")
+        cursor.execute("insert into res30_9010 values (" + str(trecord.commentid) + ", NULL, '" + str(jud) + "')")
 
 model = GaussianNB()
 
 model.fit(model_feature_list, model_labels)
 
 with conn.cursor() as cursor:
-        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_8020 N on A.commentid = N.commentid where recordtype = 'testing'")
+        cursor.execute("select distinct(A.commentid), doc_positive_confidence, doc_neutral_confidence, doc_negative_confidence, linkpresence, doccursing, kpcursing, docgeneral, kpgeneral, kpgeneral, doccontext, kpcontext, docsexlang, kpsexlang, manual_judgement from LR_allfeatures A join manualjudgement M on A.commentid = M.commentid join above30_9010 N on A.commentid = N.commentid where recordtype = 'testing'")
         test_records = cursor.fetchall()
         
 for trecord in test_records:
@@ -83,4 +83,4 @@ for trecord in test_records:
         jud = 'error'
 
     with conn.cursor() as cursor:
-        cursor.execute("update res30_8020 set NBjudg = '" + str(jud) + "' where commentid = " + str(trecord.commentid) )
+        cursor.execute("update res30_9010 set NBjudg = '" + str(jud) + "' where commentid = " + str(trecord.commentid) )
